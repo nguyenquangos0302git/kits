@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.contractMapper">
+	<select id="selectAll" resultType="contractModel">
+		select * from contract
+	</select>
+	
+	<select id="selectById" resultType="contractModel" parameterType="int">
+		select * from contract where id = #{id}
+	</select>
+	
+	<select id="selectOneDTOById" resultType="contractDTO" parameterType="int">
+		select * from (SELECT contract.* , account.username FROM contract, account WHERE contract.accountid = account.id) as a where a.id = #{id}
+	</select>
+	
+	<select id="selectAllDTO" resultType="contractDTO" >
+		SELECT contract.* , account.username FROM contract, account WHERE contract.accountid = account.id
+	</select>
+	
+	<select id="selectContractIdByAccountIdAndModelId" resultType="int" parameterType="java.util.ArrayList">
+		SELECT c.id
+		FROM contract c,detail_contract dc
+		WHERE c.id = dc.contractid AND status = 1 AND 
+		<foreach collection="array" item="item" index="index" separator="and">
+			<if test="index == 0">c.accountid = #{item}</if>
+			<if test="index == 1">dc.modelid = #{item}</if>
+		</foreach> 
+	</select>
+	 
+	<insert id="insert" parameterType="contractModel" useGeneratedKeys="true" keyProperty="id">
+		insert into contract (accountid, description, status, totalprice, createdate, modifieddate, createdby, modifiedby,ratingstatus)
+		values(#{accountid}, #{description}, #{status}, #{totalprice}, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), #{createdby}, #{modifiedby},#{ratingstatus})
+	</insert>
+	
+	<update id="update" parameterType="contractModel">
+		update contract set
+		accountid = #{accountid}, description = #{description}, status = #{status}, totalprice = #{totalprice}, ratingstatus = #{ratingstatus}, modifieddate= CURRENT_TIMESTAMP(), modifiedby=#{modifiedby}
+		where id = #{id}
+	</update>
+	
+	<update id="updatePrice" parameterType="int">
+		UPDATE contract c SET totalprice = (SELECT SUM(dc.price) FROM detail_contract dc WHERE dc.contractid = #{contractid}) WHERE id = #{contractid}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.List">
+		delete from contract where id in
+		<foreach collection="list" item="item" index="key" open="(" separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>

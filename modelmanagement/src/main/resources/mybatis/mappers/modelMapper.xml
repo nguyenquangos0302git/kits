@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.modelMapper">
+	<!-- make sql statement -->
+	<!-- List<modelModel> models = selectAll() -->
+	<select id="selectAll" resultType="modelModel"> <!-- mappers.modelMapper.selectAll -->
+		<![CDATA[
+			select * from model where status = 1
+		]]>
+	</select>
+	
+	<select id="selectAllStatus" resultType="modelModel">
+		<![CDATA[
+			select * from model
+		]]>
+	</select>
+	
+	<select id="selectOneById" resultType="modelModel"
+		parameterType="java.util.List"> <!-- mappers.modelMapper.selectAll -->
+			<![CDATA[
+				select * from model where id = #{id} 
+			]]>
+	</select>
+	
+	<select id="searchShowAmin" resultType="modelDTO" parameterType="String">
+		select * from (select m.id, m.name, m.address, m.email, m.phone, r.name rank, m.rating, m.birthday, m.gender, m.nation, m.showonhome, m.createdate, m.modifieddate, m.createdby, m.modifiedby from model m, rank_model r where m.status = 1 and m.rankid = r.id) as a where a.name like #{name}
+	</select>
+	
+	<select id="selectAllDTO" resultType="modelDTO">
+		select m.id, m.name, m.address, m.email, m.phone, r.name rank, m.rating, m.birthday, m.gender, m.nation, m.showonhome, m.createdate, m.modifieddate, m.createdby, m.modifiedby from model m, rank_model r where m.status = 1 m.rankid = r.id
+	</select>
+	
+	<select id="selectAllByName" resultType="modelModel"
+		parameterType="modelModel"> <!-- mappers.modelMapper.selectAllByName -->
+		<![CDATA[
+			select * from model where status = 1 and name like #{name}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="modelModel">
+		<![CDATA[
+			insert into model 
+			(name, address , email , phone , rankid , model.`rating` , height , weight , birthday , gender , nation , description , status , chest , hip , waist , showonhome , createdate , modifieddate , createdby , modifiedby) 
+			values (#{name}, #{address} , #{email} , #{phone} , #{rankid} , #{rating} , #{height} , #{weight} , #{birthday} , #{gender} , #{nation} , #{description} , #{status} , #{chest} , #{hip} , #{waist} , #{showonhome} , CURRENT_TIMESTAMP() , CURRENT_TIMESTAMP() , #{createdby} , #{modifiedby})
+		]]>
+	</insert>
+
+	<update id="update" parameterType="modelModel">
+		<![CDATA[
+			update model set
+			name = #{name},address = #{address},email = #{email},phone = #{phone},rankid = #{rankid},model.`rating` = #{rating},height = #{height},weight = #{weight},birthday = #{birthday},gender = #{gender},nation = #{nation},description = #{description},status = #{status},chest = #{chest},hip = #{hip},waist = #{waist},showonhome = #{showonhome},modifieddate = CURRENT_TIMESTAMP(),createdby = #{createdby},modifiedby = #{modifiedby}
+			where id = #{id}
+		]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.util.List">
+		delete from model where id in
+		<foreach collection="list" item="item" index="key" open="("
+			separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="selectAge" resultType="int">
+		<![CDATA[
+			SELECT  
+				(YEAR(CURDATE()) - YEAR(birthday)) AS age
+			FROM
+	    		model
+	    		ORDER BY birthday DESC
+	    ]]>
+	</select>
+
+	<select id="selectAllModel" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id
+			GROUP BY m.id
+		]]>
+	</select>
+	
+	<select id="selectAllModelLimit" resultType="modelDTO" parameterType="java.util.ArrayList">
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id
+			GROUP BY m.id
+			limit 
+			<foreach collection="array" item="item" index="key"
+				separator=" ">
+				<if test="key == 0"> ${item},</if>
+				<if test="key == 1"> ${item}</if>
+			</foreach> 
+			
+	</select>
+	
+	<select id="selectModelByMale" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id AND m.gender = 0
+			GROUP BY m.id
+		]]>
+	</select>
+	
+	<select id="selectModelByMaleLimit" resultType="modelDTO" parameterType="java.util.ArrayList">
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id AND m.gender = 0
+			GROUP BY m.id
+			limit 
+			<foreach collection="array" item="item" index="key"
+				separator=" ">
+				<if test="key == 0"> ${item},</if>
+				<if test="key == 1"> ${item}</if>
+			</foreach> 
+	</select>
+	
+	<select id="selectModelByFemale" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id AND m.gender = 1
+			GROUP BY m.id
+		]]>
+	</select>
+	
+	<select id="selectModelByFemaleLimit" resultType="modelDTO" parameterType="java.util.ArrayList">
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id AND m.gender = 1
+			GROUP BY m.id
+			limit 
+			<foreach collection="array" item="item" index="key"
+				separator=" ">
+				<if test="key == 0"> ${item},</if>
+				<if test="key == 1"> ${item}</if>
+			</foreach> 
+	</select>
+	
+	<select id="selectModelByNewFaces" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id
+			GROUP BY m.id
+			ORDER BY m.createdate DESC
+		]]>
+	</select>
+	
+	<select id="selectModelByNewFacesLimit" resultType="modelDTO" parameterType="java.util.ArrayList">
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id
+			GROUP BY m.id
+			ORDER BY m.createdate DESC
+			limit 
+			<foreach collection="array" item="item" index="key"
+				separator=" ">
+				<if test="key == 0"> ${item},</if>
+				<if test="key == 1"> ${item}</if>
+			</foreach> 
+	</select>
+	
+	<select id="selectModelByKid" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id AND (YEAR(CURDATE()) - YEAR(m.birthday)) < 14
+			GROUP BY m.id
+		]]>
+	</select>
+	
+	<select id="selectModelByKidLimit" resultType="modelDTO" parameterType="java.util.ArrayList">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id AND (YEAR(CURDATE()) - YEAR(m.birthday)) < 14
+			GROUP BY m.id
+		]]>
+			limit
+			<foreach collection="array" item="item" index="key"
+				separator=" ">
+				<if test="key == 0"> ${item},</if>
+				<if test="key == 1"> ${item}</if>
+			</foreach> 
+	</select>
+
+	<select id="selectTopTenModel" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m 
+				JOIN rank_model r ON m.rankid = r.id
+				JOIN images i ON i.modelid = m.id
+			GROUP BY m.id
+			ORDER BY m.rating DESC
+			LIMIT 10
+		]]>
+	</select>
+	
+	<select id="selectById" resultType="modelDTO" parameterType="int"> <!-- mappers.modelMapper.selectAll -->
+			<![CDATA[
+				SELECT m.id, m.name,m.address,m.email,m.phone,m.rating,m.height,m.weight,m.birthday,m.gender,m.nation,m.description,m.`status`,m.chest,m.hip,m.waist,r.name,r.price,r.salary,i.imglink
+				FROM model m 
+					JOIN rank_model r ON m.rankid = r.id
+					JOIN images i ON i.modelid = m.id
+				WHERE m.id = #{id}
+				GROUP BY m.id
+			]]>
+	</select>
+	<select id="selectTalent" resultType="modelDTO" parameterType="int" >
+		<![CDATA[
+			SELECT m.name, a.name AS talent
+			FROM model_talent n, model m, talent a
+			WHERE m.id = n.modelid AND a.id=n.talentid AND modelid = #{modelid}
+		]]>
+	</select>
+	
+	<select id="multiImages" resultType="String" parameterType="int">
+		<![CDATA[
+			SELECT imglink
+			FROM model m, images n
+			WHERE m.id = n.modelid AND modelid = #{modelid}
+		]]>
+	</select>
+
+	<select id="selectAllModelAndSearchAndLimit" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink
+			FROM model m, rank_model r, images i
+			WHERE m.rankid = r.id AND i.modelid = m.id
+			GROUP BY m.id
+		]]>
+	</select>
+	
+	<select id="selectAllModelAndSearch" parameterType="modelSearchAndLimitRequestDTO" resultType="modelDTO">
+		<![CDATA[
+			SELECT m.id,m.name,m.rating,m.description,r.name as rank,r.price,i.imglink, m.rating
+			FROM model m, rank_model r, images i, model_talent t_l, talent t 
+			WHERE m.rankid = r.id AND i.modelid = m.id AND m.id = t_l.modelid AND t.id = t_l.talentid AND (YEAR(CURDATE()) - YEAR(m.birthday)) >=
+			#{age} and m.name like #{name} and t.id in
+		]]>
+			<foreach collection="talent" item="item1" open="(" separator=" , " close=")">
+					#{item1}
+			</foreach>
+			and m.rankid in
+			<foreach collection="rank" item="item2" open="(" separator=" , " close=")">
+					#{item2}
+			</foreach>
+			GROUP BY m.id 
+	</select>
+	
+	
+	<select id="selectAllModelAndSearchAndLimitAndOffset" parameterType="modelSearchAndLimitRequestDTO" resultType="modelDTO">
+			SELECT * FROM 
+			(SELECT m.id id,m.name name,r.price, r.id rankid, m.rating,m.description description,r.name rank,img.imglink imglink FROM rank_model r, model m,images img ,model_talent tl WHERE m.id = img.modelid = tl.modelid AND m.rankid = r.id AND m.rankid IN 
+			<foreach collection="rank" item="item2" open="(" separator=" , " close=")">
+					#{item2}
+			</foreach>
+			<![CDATA[
+			AND (YEAR(CURDATE()) - YEAR(m.birthday))   <= #{age} and m.name LIKE #{name}
+			]]>
+			GROUP BY m.id,tl.talentid ) AS a 
+				WHERE a.id IN (SELECT a.modelid FROM (SELECT * FROM model_talent WHERE talentid IN 
+				<foreach collection="talent" item="item1" open="(" separator=" , " close=")">
+					#{item1}
+				</foreach>
+				) AS a group BY a.modelid having COUNT(a.modelid)>#{talentsize}) 
+				GROUP BY a.id 
+			limit #{limit}, #{offset}		
+	</select>
+
+	<select id="selectMaleModelAndSearchAndLimitAndOffset" parameterType="modelSearchAndLimitRequestDTO" resultType="modelDTO">
+			SELECT * FROM 
+			(SELECT m.id id,m.name name,r.price, r.id rankid, m.rating,m.description description,r.name rank,img.imglink imglink FROM rank_model r, model m,images img ,model_talent tl WHERE m.id = img.modelid = tl.modelid AND m.rankid = r.id AND m.rankid IN 
+			<foreach collection="rank" item="item2" open="(" separator=" , " close=")">
+					#{item2}
+			</foreach>
+			<![CDATA[
+			AND (YEAR(CURDATE()) - YEAR(m.birthday))   <= #{age} and m.name LIKE #{name} and m.gender = 0
+			]]>
+			GROUP BY m.id,tl.talentid ) AS a 
+				WHERE a.id IN (SELECT a.modelid FROM (SELECT * FROM model_talent WHERE talentid IN 
+				<foreach collection="talent" item="item1" open="(" separator=" , " close=")">
+					#{item1}
+				</foreach>
+				) AS a group BY a.modelid having COUNT(a.modelid)>#{talentsize}) 
+				GROUP BY a.id 
+			limit #{limit}, #{offset}		
+	</select>
+	
+	<select id="selectFemaleModelAndSearchAndLimitAndOffset" parameterType="modelSearchAndLimitRequestDTO" resultType="modelDTO">
+			SELECT * FROM 
+			(SELECT m.id id,m.name name,r.price, r.id rankid, m.rating,m.description description,r.name rank,img.imglink imglink FROM rank_model r, model m,images img ,model_talent tl WHERE m.id = img.modelid = tl.modelid AND m.rankid = r.id AND m.rankid IN 
+			<foreach collection="rank" item="item2" open="(" separator=" , " close=")">
+					#{item2}
+			</foreach>
+			<![CDATA[
+			AND (YEAR(CURDATE()) - YEAR(m.birthday))   <= #{age} and m.name LIKE #{name} and m.gender = 1
+			]]>
+			GROUP BY m.id,tl.talentid ) AS a 
+				WHERE a.id IN (SELECT a.modelid FROM (SELECT * FROM model_talent WHERE talentid IN 
+				<foreach collection="talent" item="item1" open="(" separator=" , " close=")">
+					#{item1}
+				</foreach>
+				) AS a group BY a.modelid having COUNT(a.modelid)>#{talentsize}) 
+				GROUP BY a.id 
+			limit #{limit}, #{offset}		
+	</select>
+	
+	<select id="selectKidsModelAndSearchAndLimitAndOffset" parameterType="modelSearchAndLimitRequestDTO" resultType="modelDTO">
+			SELECT * FROM 
+			(SELECT m.id id,m.name name,r.price, r.id rankid, m.rating,m.description description,r.name rank,img.imglink imglink FROM rank_model r, model m,images img ,model_talent tl WHERE m.id = img.modelid = tl.modelid AND m.rankid = r.id AND m.rankid IN 
+			<foreach collection="rank" item="item2" open="(" separator=" , " close=")">
+					#{item2}
+			</foreach>
+			<![CDATA[
+			AND (YEAR(CURDATE()) - YEAR(m.birthday))   <= #{age} and m.name LIKE #{name}
+			]]>
+			GROUP BY m.id,tl.talentid ) AS a 
+				WHERE a.id IN (SELECT a.modelid FROM (SELECT * FROM model_talent WHERE talentid IN 
+				<foreach collection="talent" item="item1" open="(" separator=" , " close=")">
+					#{item1}
+				</foreach>
+				) AS a group BY a.modelid having COUNT(a.modelid)>#{talentsize}) 
+				GROUP BY a.id 
+			limit #{limit}, #{offset}		
+	</select>
+	
+	<select id="selectNewFacesModelAndSearchAndLimitAndOffset" parameterType="modelSearchAndLimitRequestDTO" resultType="modelDTO">
+			SELECT * FROM 
+			(SELECT m.id id, m.createdate createdate,m.name name,r.price, r.id rankid, m.rating,m.description description,r.name rank,img.imglink imglink FROM rank_model r, model m,images img ,model_talent tl WHERE m.id = img.modelid = tl.modelid AND m.rankid = r.id AND m.rankid IN 
+			<foreach collection="rank" item="item2" open="(" separator=" , " close=")">
+					#{item2}
+			</foreach>
+			<![CDATA[
+			AND (YEAR(CURDATE()) - YEAR(m.birthday))   <= #{age} and m.name LIKE #{name}
+			]]>
+			GROUP BY m.id,tl.talentid ) AS a 
+				WHERE a.id IN (SELECT a.modelid FROM (SELECT * FROM model_talent WHERE talentid IN 
+				<foreach collection="talent" item="item1" open="(" separator=" , " close=")">
+					#{item1}
+				</foreach>
+				) AS a group BY a.modelid having COUNT(a.modelid)>#{talentsize}) 
+				GROUP BY a.id
+				ORDER BY a.createdate
+			limit #{limit}, #{offset}		
+	</select>
+
+</mapper>

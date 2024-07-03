@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.slideMapper">
+	<!-- make sql statement -->
+	<!-- List<slideModel> slides = selectAll() -->
+	<select id="selectAll" resultType="slideModel"> <!-- mappers.slideMapper.selectAll -->
+		<![CDATA[
+			select * from slide
+		]]>
+	</select>
+	
+	<select id="selectAllByImg" resultType="slideModel" parameterType="slideModel"> <!-- mappers.modelMapper.selectAll -->
+		<![CDATA[
+			select * from slide where img like #{img}
+		]]>
+	</select>
+	
+	<select id="selectById" resultType="slideModel" parameterType="int"> <!-- mappers.modelMapper.selectAll -->
+		<![CDATA[
+			select * from slide where id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="slideModel">
+		<![CDATA[
+			insert into slide 
+			(img, description, createdate, modifieddate, createdby, modifiedby) 
+			values (#{img}, #{description} , CURRENT_TIMESTAMP() , CURRENT_TIMESTAMP() , 'admin' , 'admin')
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="slideModel">
+		<![CDATA[
+			update slide set 
+			img = #{img}, description = #{description}, 
+			modifieddate = CURRENT_TIMESTAMP() , 
+			createdby = 'admin', modifiedby = 'admin' 
+			where id = #{id}
+		]]>
+	</update>
+	<delete id="delete" parameterType="java.util.List">
+		delete from slide where id in
+		<foreach collection="list" item="item" index="key" open="(" separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+</mapper>

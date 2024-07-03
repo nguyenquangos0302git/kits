@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.roleMapper">
+
+	<select id="selectRoleNames" resultType="String"
+		parameterType="int">
+		<![CDATA[
+			SELECT r.name
+			FROM role r
+			WHERE r.id IN (
+				SELECT roleid
+				FROM role_account
+				WHERE accountid = #{accountid} 
+			)
+		]]>
+	</select>
+
+	<select id="selectAll" resultType="roleModel"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from role
+		]]>
+	</select>
+	<select id="selectById" resultType="roleModel" parameterType="int">
+	<![CDATA[
+	 select * from role where id=#{id}
+	]]>
+	</select>
+
+	<insert id="insert" parameterType="roleModel">
+		<![CDATA[
+			 insert into role
+			 (name,description,salary,createdate,modifieddate,createdby,modifiedby)
+			 value
+	 		(#{name},#{description},#{salary},#{createdate},#{modifieddate},#{createdby},#{modifiedby})
+	]]>
+	</insert>
+	<update id="update" parameterType="roleModel"> 
+	<![CDATA[
+		update role set
+		name = #{name},
+		description = #{description},
+		salary = #{salary},
+		createdate = #{createdate},
+		modifieddate = #{modifieddate},
+		createdby = #{createdby},
+		modifiedby = #{modifiedby}
+		where id=#{id}
+	]]>
+	</update>
+
+	<select id="selectAllAndSort" resultType="roleModel"
+		parameterType="java.util.ArrayList"> <!-- mappers.accountMapper.selectAll -->
+		select * from role ORDER BY
+		<foreach collection="array" item="item" index="key"
+			separator=" ">
+			<if test="key == 0"> ${item}</if>
+			<if test="key == 1"> ${item}</if>
+		</foreach>
+	</select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.contactMapper">
+	<!-- make sql statement -->
+	<!-- List<AccountModel> accounts = selectAll() -->
+	<select id="selectAll" resultType="contactModel"> <!-- mappers.contactMapper.selectAll -->
+		<![CDATA[
+			select * from contact
+		]]>
+	</select>
+	
+	<select id="selectAllByName" resultType="contactModel"  parameterType="String"> <!-- mappers.talentMapper.selectAll -->
+		<![CDATA[
+			select * from contact where name like #{name}
+		]]>
+	</select>
+	
+	<select id="selectById" resultType="contactModel" parameterType="int"> <!-- mappers.modelMapper.selectAll -->
+		<![CDATA[
+			select * from contact where id = #{id}
+		]]>
+	</select>
+	
+	
+	<insert id="insert" parameterType="contactModel">
+
+			insert into contact 
+			(name, email, message) 
+			values (#{name}, #{email}, #{message})
+
+	</insert>
+	
+	<delete id="delete" parameterType="java.util.List">
+		delete from contact where id in
+		<foreach collection="list" item="item" index="key" open="(" separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+</mapper>

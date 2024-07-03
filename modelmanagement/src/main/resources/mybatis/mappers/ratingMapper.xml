@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.ratingMapper">
+
+
+	<!-- <select id="sumStarByModelid" resultType="int" parameterType="int">
+		SELECT SUM(star) as sumStar FROM rating WHERE modelid = #{id}
+	</select> -->
+
+	<select id="sumStarByModelid" resultType="int" parameterType="int">
+		SELECT SUM(star) FROM rating WHERE modelid = #{modelid}
+	</select>
+
+	
+
+	<!-- <select id="sumStarByModelid" resultType="int" parameterType="ratingDTO">
+		SELECT SUM(star) as sumStar FROM rating WHERE modelid = #{modelid} AND star = #{star}
+	</select> -->
+
+	<select id="countStarByModelid" resultType="int" parameterType="ratingModel">
+		SELECT count(star) FROM rating WHERE modelid = #{modelid} and star>0
+	</select>
+
+	
+	<select id="countStarByModelidStar" resultType="int" parameterType="ratingModel">
+		SELECT count(star) FROM rating WHERE modelid = #{modelid} AND star = #{star}
+	</select>
+	
+	<select id="avgStarModel" resultType="double" parameterType="int">
+		SELECT round(avg(star),1) FROM rating WHERE modelid = #{modelid} and star>0
+	</select>
+	
+	<select id="findAllModelid" resultType="int" >
+		SELECT modelid FROM rating GROUP BY modelid
+	</select>
+	<select id="findRatingByAccountIdAndModelId" resultType="ratingModel" parameterType="java.util.ArrayList">
+		 SELECT * from rating where 
+		 <foreach collection="array" item="item" index="index" separator="and">
+		<if test="index == 0">accountid = #{item}</if>	 
+		 <if test="index == 1">modelid= #{item}</if>
+		 <if test="index == 2"> contractid= #{item}</if>	
+		 </foreach>
+	</select>
+	
+	<select id="findContractidByAccountidAndModelid" resultType="int" parameterType="java.util.ArrayList">
+		 SELECT con.id FROM contract con , detail_contract dcon WHERE
+		con.id=dcon.contractid and
+		<foreach collection="array" item="item" index="index" separator="and">
+		<if test="index == 0">con.accountid = #{item}</if>	 
+		 <if test="index == 1">dcon.modelid= #{item}</if>
+		 </foreach>
+		 AND  
+		<![CDATA[
+		(con.ratingstatus <>1 or con.ratingstatus IS NULL)
+		]]>
+	</select>
+	
+	<select id="checkratingByContractid" resultType="ratingModel" parameterType="int">
+	<![CDATA[
+		SELECT a.checkrating <DATE(NOW()) checkrating 
+	]]>
+		FROM (
+		SELECT max(date(concat(b.startyear,'-',b.startmonth,'-',b.startdate))) checkrating 
+			FROM contract c, booking b 
+			WHERE date(c.createdate) = DATE(b.createdate) AND c.`status`=1 AND b.`status`=1 
+					AND c.id = #{contractid}) AS a WHERE checkrating >=0
+	</select>
+	
+	<insert id="insert" parameterType="ratingModel">
+		insert into rating(accountid, modelid, contractid, star, createdate, modifieddate, createdby, modifiedby)
+			values(#{accountid}, #{modelid}, #{contractid}, #{star}, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), #{createdby}, #{modifiedby})
+	</insert>
+	
+	<update id="update" parameterType="ratingModel">
+		update rating set star=#{star},
+		modifieddate=CURRENT_TIMESTAMP(), modifiedby=#{modifiedby} where modelid=#{modelid} and contractid = #{contractid}
+	</update>
+
+	
+</mapper>

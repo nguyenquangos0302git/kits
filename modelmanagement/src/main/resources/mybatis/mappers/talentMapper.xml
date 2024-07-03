@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.talentMapper">
+	<!-- make sql statement -->
+	<!-- List<talentModel> slides = selectAll() -->
+	<select id="selectAll" resultType="talentModel"> <!-- mappers.talentMapper.selectAll -->
+		<![CDATA[
+			select * from talent
+		]]>
+	</select>
+	
+	<select id="selectAllByName" resultType="talentModel"  parameterType="talentModel"> <!-- mappers.talentMapper.selectAll -->
+		<![CDATA[
+			select * from talent where name like #{name}
+		]]>
+	</select>
+	
+	<select id="selectById" resultType="talentModel" parameterType="int"> <!-- mappers.modelMapper.selectAll -->
+		<![CDATA[
+			select * from talent where id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="talentModel">
+		<![CDATA[
+			insert into talent 
+			(name, createdate, modifieddate, createdby, modifiedby) 
+			values (#{name} , CURRENT_TIMESTAMP() , CURRENT_TIMESTAMP() , 'admin' , 'admin')
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="talentModel">
+		<![CDATA[
+			update talent set 
+			name = #{name}, 
+			modifieddate = CURRENT_TIMESTAMP() , 
+			createdby = 'admin' , modifiedby = 'admin' 
+			where id = #{id}
+		]]>
+	</update>
+	<delete id="delete" parameterType="java.util.List">
+		delete from talent where id in
+		<foreach collection="list" item="item" index="key" open="(" separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

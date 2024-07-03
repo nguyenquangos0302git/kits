@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.salaryStaffMapper">
+
+	<insert id="insert" parameterType="salaryStaffModel"
+		useGeneratedKeys="true" keyProperty="id">
+			<![CDATA[
+				insert into salary_staff 
+				(accountid, month, salary, year) 
+				values (#{accountid}, #{month}, #{salary}, #{year})
+			]]>
+	</insert>
+
+</mapper>

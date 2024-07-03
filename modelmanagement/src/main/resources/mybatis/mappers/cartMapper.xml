@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.cartMapper">
+
+	<select id="countCartByAccountId" resultType="int" parameterType="int">
+		<![CDATA[
+			SELECT COUNT(*)	FROM cart WHERE accountid = #{accountid}
+		]]>
+	</select>
+	
+	<select id="selectOneByModelId" resultType="cartModel" parameterType="java.util.ArrayList">
+			SELECT * FROM cart WHERE
+			<foreach collection="array" item="item" index="key" separator=" and ">
+				<if test="key == 0"> modelid = #{item}</if>
+				<if test="key == 1"> accountid = #{item}</if>
+			</foreach>
+	</select>
+	
+	<select id="selectOneByAccountId" resultType="cartModel" parameterType="int">
+			SELECT * FROM cart WHERE accountid = #{accountid}
+	</select>
+	
+	<select id="selectAllByAccountId" resultType="cartDTO" parameterType="int">
+			<![CDATA[
+				SELECT m.id as modelid,c.id,m.name,i.imglink,r.name as rank
+				FROM cart c,model m, images i, rank_model r 
+				WHERE c.modelid = m.id AND i.modelid = m.id AND m.rankid = r.id AND accountid = #{accountid}
+				GROUP BY c.modelid
+			]]>
+	</select>
+
+	<insert id="insert" parameterType="cartModel">
+		<![CDATA[
+			insert into cart 
+			(modelid,accountid,createdby,modifiedby,day,price)
+			values (#{modelid}, #{accountid}, #{createdby}, #{modifiedby},#{day},#{price})
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="cartModel">
+		<![CDATA[
+			update cart set modelid = #{modelid}, userid = #{accountid}, createdate = #{createdate}, createdby = #{createdby}, modifiedby = #{modifiedby}
+			where id = #{id}
+		]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.util.ArrayList">
+			delete from cart where 
+			<foreach collection="array" item="item" index="key" separator=" and ">
+				<if test="key == 0"> modelid = #{item}</if>
+				<if test="key == 1"> accountid = #{item}</if>
+			</foreach>
+	</delete>
+
+</mapper>

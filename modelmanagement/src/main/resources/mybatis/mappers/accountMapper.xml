@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.accountMapper">
+	<!-- make sql statement -->
+	<!-- List<AccountModel> accounts = selectAll() -->
+	<select id="selectAll" resultType="accountModel"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from account
+		]]>
+	</select>
+	
+	<select id="selectByUserName" resultType="accountModel" parameterType="String"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from account where username = #{username}
+		]]>
+	</select>
+	
+	<select id="selectByUserNameOrEmail" resultType="accountModel" parameterType="java.util.ArrayList"> <!-- mappers.accountMapper.selectAll -->
+			select * from account where
+			<foreach collection="array" item="item" index="key" open="">
+				<if test="key == 0"> username = #{item}</if>
+				<if test="key == 1"> or email = #{item}</if>
+			</foreach>
+	</select>
+	
+	<select id="selectById" resultType="accountModel" parameterType="int"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from account where id = #{id}
+		]]>
+	</select>
+	
+	<select id="selectByUsernameAndPassword" resultType="accountModel" parameterType="java.util.ArrayList"> <!-- mappers.accountMapper.selectAll -->
+		select * from account where
+		<foreach collection="array" item="item" index="key" open="" separator=" and ">
+			<if test="key == 0"> username = #{item}</if>
+			<if test="key == 1"> password = #{item}</if>
+		</foreach>
+	</select>
+	
+	<select id="selectByUsernameAndStatus" resultType="accountModel" parameterType="java.util.ArrayList"> <!-- mappers.accountMapper.selectAll -->
+			select * from account where  
+			<foreach collection="array" item="item" index="key" open=" " separator=" and ">
+				<if test="key == 0"> username = #{item}</if>
+				<if test="key == 1"> status > #{item}</if>
+			</foreach>
+	</select>
+	
+	<insert id="insert" parameterType="accountModel" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into account 
+			(username, password, email, codeverification, note, createdby, modifiedby) 
+			values (#{username}, #{password}, #{email}, #{codeverification}, #{note}, #{createdby}, #{modifiedby})
+		]]>
+	</insert>
+	
+	<!-- <insert id="updateStatusAccount" parameterType="java.util.ArrayList">
+			update account set 
+			<foreach collection="array" item="item" index="key" open=" ">
+				<if test="key == 0"> status = #{item},</if>
+				<if test="key == 1"> email = #{item}</if>
+				<if test="key == 2"> where id = #{item}</if>
+			</foreach>
+	</insert> -->
+	
+	<update id="updateStatusAccount" parameterType="java.util.ArrayList">
+		update account set 
+			<foreach collection="array" item="item" index="key">
+				<if test="key == 0"> status = #{item},</if>
+				<if test="key == 1"> note = #{item},</if>
+				<if test="key == 2"> modifiedby = #{item},</if>
+				<if test="key == 3"> modifieddate = #{item}</if>
+				<if test="key == 4"> where id = #{item}</if>
+			</foreach>
+	</update>
+	
+	<update id="updateCreatedateAccount" parameterType="java.util.ArrayList">
+		update account set 
+			<foreach collection="array" item="item" index="key">
+				<if test="key == 0"> note = #{item},</if>
+				<if test="key == 1"> createdate = #{item},</if>
+				<if test="key == 2"> modifiedby = #{item},</if>
+				<if test="key == 3"> modifieddate = #{item}</if>
+				<if test="key == 4"> where id = #{item}</if>
+			</foreach>
+	</update>
+	
+	<delete id="deleteAccountById" parameterType="java.util.List">
+		delete from account where id in
+		<foreach collection="list" item="item" index="key" open="(" separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+</mapper>

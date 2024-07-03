@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.commentMapper">
+
+	<select id="selectCommentByModelId" parameterType="int" resultType="commentDTO">
+		<![CDATA[
+			SELECT c.id,c.content,c.modelid,c.accountid,c.createdate,c.parentid,a.username,(SELECT COUNT(*) FROM comment WHERE parentid = c.id) childcomment
+			FROM comment c
+				JOIN account a ON c.accountid = a.id
+			WHERE modelid = #{modelid} and c.parentid = 0
+			ORDER BY c.createdate ASC
+		]]>
+	</select>
+	
+	<select id="selectSubComment" parameterType="int" resultType="commentDTO">
+		<![CDATA[
+			SELECT c.id,c.content,c.modelid,c.parentid,c.accountid,c.createdate,c.parentid,a.username
+			FROM comment c
+				JOIN account a ON c.accountid = a.id
+			WHERE c.modelid = #{modelid} and c.parentid > 0
+			ORDER BY c.createdate ASC
+		]]>
+	</select>
+	
+	<select id="selectById" parameterType="int" resultType="commentDTO">
+		<![CDATA[
+			SELECT c.id,c.content,c.modelid,c.parentid,c.accountid,c.createdate,c.parentid,a.username
+			FROM comment c
+				JOIN account a ON c.accountid = a.id
+			WHERE c.id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="commentModel" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into comment(content,accountid,modelid,parentid,commenttime,createdate,modifieddate,createdby,modifiedby)
+			values(#{content},#{accountid},#{modelid},#{parentid},CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),#{createdby},#{modifiedby})
+		]]>
+	</insert>
+	
+	<delete id="delete">
+		delete from comment where id = #{id}
+	</delete>
+	
+	<delete id="deletesubcomment" parameterType="int">
+		<![CDATA[
+			delete from comment where parentid = #{id}
+		]]>
+	</delete>
+
+</mapper>

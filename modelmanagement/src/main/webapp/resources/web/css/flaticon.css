@@ -1,0 +1,48 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 12/08/2018 13:24
+  	*/
+
+
+@font-face {
+    font-family: "Alef"
+    src: url("..\..\public\fonts\Alef\Alef-Webfont\Alef-Bold.eot")
+    src: url("..\..\public\fonts\Alef\Alef-Webfont\Alef-Bold.eot?#iefix") format("embedded-opentype")
+    src: url("..\..\public\fonts\Alef\Alef-Webfont\Alef-Bold.woff") format("woff")
+    src: url("..\..\public\fonts\Alef\Alef-Webfont\Alef-Bold.ttf") format("truetype")
+    src: url("..\..\public\fonts\Alef\Alef-Webfont\Alef-Bold.svg#alefbold") format("svg")
+    font-weight: bold
+    font-style: normal
+    }
+    
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("../fonts/flaticon/font/Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.flaticon-001-box:before {
+	content: "\e001";
+}
+.flaticon-002-recommended:before {
+	content: "\e002";
+}
+.flaticon-003-medal:before {
+	content: "\e003";
+}

@@ -1,0 +1,11 @@
+.backgroundshadow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: black;
+	opacity: .5;
+	z-index: 9;
+	display: none;
+}

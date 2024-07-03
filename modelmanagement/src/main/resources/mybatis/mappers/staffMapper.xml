@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.staffMapper">
+
+	<select id="findOneByAccountId" resultType="staffModel"
+		parameterType="int"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from staff where accountid = #{accountid}
+		]]>
+	</select>
+
+	<select id="selectStaffByIdCard" resultType="staffModel"
+		parameterType="String"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from staff where idcard = #{idcard}
+		]]>
+	</select>
+
+	<insert id="insert" parameterType="staffModel"
+		useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into staff 
+			(name, address, phone, company, idcard, gender, avatar, accountid, birthday, createdby, modifiedby) 
+			values (#{name}, #{address}, #{phone}, #{company}, #{idcard}, #{gender}, #{avatar}, #{accountid}, #{birthday}, #{createdby}, #{modifiedby})
+		]]>
+	</insert>
+	
+	<delete id="deleteStaffByAccountId" parameterType="int"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			delete from staff where accountid = #{accountid}
+		]]>
+	</delete>
+
+</mapper>

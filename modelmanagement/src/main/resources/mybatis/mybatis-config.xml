@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 1.class name's alias -->
+	<typeAliases>
+		<typeAlias type="tp.kits3.comedians.model.AccountModel" alias="accountModel"/>
+		<typeAlias type="tp.kits3.comedians.model.ModelModel" alias="modelModel"/>
+		<typeAlias type="tp.kits3.comedians.model.SlideModel" alias="slideModel"/>
+		<typeAlias type="tp.kits3.comedians.model.UserModel" alias="userModel"/>
+		<typeAlias type="tp.kits3.comedians.model.RoleAccountModel" alias="roleAccountModel"/>
+		<typeAlias type="tp.kits3.comedians.model.RoleModel" alias="roleModel"/>
+		<typeAlias type="tp.kits3.comedians.model.ContactModel" alias="contactModel"/>
+		<typeAlias type="tp.kits3.comedians.model.TalentModel" alias="talentModel"/>
+		<typeAlias type="tp.kits3.comedians.model.CartModel" alias="cartModel"/>
+		<typeAlias type="tp.kits3.comedians.model.CommentModel" alias="commentModel"/>
+		<typeAlias type="tp.kits3.comedians.model.ContractDetailModel" alias="contractDetailModel"/>
+		<typeAlias type="tp.kits3.comedians.model.ContractModel" alias="contractModel"/>
+		<typeAlias type="tp.kits3.comedians.model.ImagesModel" alias="imagesModel"/>
+		<typeAlias type="tp.kits3.comedians.model.RankModel" alias="rankModel"/>
+		<typeAlias type="tp.kits3.comedians.model.SalaryStaffModel" alias="salaryStaffModel"/>
+		<typeAlias type="tp.kits3.comedians.model.SalaryModelModel" alias="salaryModelModel"/>
+		<typeAlias type="tp.kits3.comedians.model.RatingModel" alias="ratingModel"/>
+		<!-- <typeAlias type="tp.kits3.comedians.model.RatingDTO" alias="ratingDTO"/> -->
+		<typeAlias type="tp.kits3.comedians.dto.RatingDTO" alias="ratingDTO"/>
+		<typeAlias type="tp.kits3.comedians.model.ReportModel" alias="reportModel"/>
+		<typeAlias type="tp.kits3.comedians.model.SocialModel" alias="socialModel"/>
+		<typeAlias type="tp.kits3.comedians.model.StaffModel" alias="staffModel"/>
+		<typeAlias type="tp.kits3.comedians.model.UserRoleModel" alias="userRoleModel"/>
+		<typeAlias type="tp.kits3.comedians.model.AccountDeleteModel" alias="accountDeleteModel"/>
+		<typeAlias type="tp.kits3.comedians.model.BookingModel" alias="bookingModel"/>
+		<typeAlias type="tp.kits3.comedians.dto.ContractDetailDTO" alias="contractDetailDTO"/>
+		<typeAlias type="tp.kits3.comedians.dto.ModelDTO" alias="modelDTO"/>
+		<typeAlias type="tp.kits3.comedians.dto.ReportDTO" alias="reportDTO"/>
+		<typeAlias type="tp.kits3.comedians.dto.CommentDTO" alias="commentDTO"/>
+		<typeAlias type="tp.kits3.comedians.dto.ContractDTO" alias="contractDTO"/>
+		<typeAlias type="tp.kits3.comedians.dto.CartDTO" alias="cartDTO"/>
+		<typeAlias type="tp.kits3.comedians.dto.ModelSearchAndLimitRequestDTO" alias="modelSearchAndLimitRequestDTO"/>
+	</typeAliases>
+	<!-- 2.config DB connection info like tomcat context.xml DataSource -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="org.mariadb.jdbc.Driver"/>
+				<property name="url" value="jdbc:mariadb://192.168.123.65/modelmanagement"/>
+				<!-- <property name="url" value="jdbc:mariadb://localhost/modelmanagement"/> -->
+				<property name="username" value="root"/>
+				<property name="password" value="123456"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- mapper for each table -->
+	<mappers>
+		<!-- from src/main/java/ -->
+		<mapper resource="mybatis/mappers/accountMapper.xml"/>
+		<mapper resource="mybatis/mappers/modelMapper.xml"/>
+		<mapper resource="mybatis/mappers/slideMapper.xml"/>
+		<mapper resource="mybatis/mappers/userMapper.xml"/>
+		<mapper resource="mybatis/mappers/roleAccountMapper.xml"/>
+		<mapper resource="mybatis/mappers/roleMapper.xml"/>
+		<mapper resource="mybatis/mappers/contactMapper.xml"/>
+		<mapper resource="mybatis/mappers/talentMapper.xml"/>
+		<mapper resource="mybatis/mappers/cartMapper.xml"/>
+		<mapper resource="mybatis/mappers/commentMapper.xml"/>
+		<mapper resource="mybatis/mappers/contractDetailMapper.xml"/>
+		<mapper resource="mybatis/mappers/contractMapper.xml"/>
+		<mapper resource="mybatis/mappers/imagesMapper.xml"/>
+		<mapper resource="mybatis/mappers/rankMapper.xml"/>
+		<mapper resource="mybatis/mappers/salaryStaffMapper.xml"/>
+		<mapper resource="mybatis/mappers/salaryModelMapper.xml"/>
+		<mapper resource="mybatis/mappers/ratingMapper.xml"/>
+		<mapper resource="mybatis/mappers/reportMapper.xml"/>
+		<mapper resource="mybatis/mappers/socialMapper.xml"/>
+		<mapper resource="mybatis/mappers/staffMapper.xml"/>
+		<mapper resource="mybatis/mappers/userRoleMapper.xml"/>
+		<mapper resource="mybatis/mappers/accountDeleteMapper.xml"/>
+		<mapper resource="mybatis/mappers/bookingMapper.xml"/>
+	</mappers>
+</configuration>

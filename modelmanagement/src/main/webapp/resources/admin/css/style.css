@@ -1,0 +1,34 @@
+.hideContent {
+    overflow: hidden;
+    line-height: 1em;
+    height: 2em;
+}
+
+.showContent {
+    line-height: 1em;
+    height: auto;
+}
+.showContent{
+    height: auto;
+}
+.show-more {
+    padding: 10px 0;
+    text-align: center;
+}
+
+.detailcontract {
+	position: absolute;
+	opacity: 1;
+	z-index: 2;
+	top: 10%;
+	left: 26%;
+}
+
+.container-detail-contract{
+	position: absolute;
+	z-index: 1;
+	opacity: 0.3;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+}

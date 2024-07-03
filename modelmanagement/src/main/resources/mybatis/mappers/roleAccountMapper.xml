@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.roleAccountMapper">
+	<!-- make sql statement -->
+	<!-- List<AccountModel> accounts = selectAll() -->
+	
+	<select id="selectAll" resultType="roleAccountModel"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from role_account
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="roleAccountModel" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into role_account 
+			(accountid) 
+			values (#{accountid})
+		]]>
+	</insert>
+	
+	<insert id="insertStaffRole" parameterType="roleAccountModel" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into role_account 
+			(roleid, accountid) 
+			values (#{roleid}, #{accountid})
+		]]>
+	</insert>
+	
+	<delete id="deleteRoleAccountByAccountId" parameterType="int">
+		<![CDATA[
+			delete from role_account where accountid = #{accountid}
+		]]>
+	</delete>
+	
+</mapper>

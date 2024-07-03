@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.contractDetailMapper">
+	<select id="selectAll" resultType="contractDetailModel">
+		select * from detail_contract
+	</select>
+	
+	<select id="selectAllDTO" resultType="contractDetailDTO">
+		SELECT c.id, c.contractid, c.detail, d.name, c.`status`, c.createdate, c.modifieddate, c.createdby, c.modifiedby FROM 
+(SELECT a.id, a.contractid, a.detail,a.modelid, b.status, a.createdate, a.modifieddate, a.createdby, a.modifiedby FROM detail_contract a, contract b WHERE a.contractid=b.id) AS c, model d where c.modelid = d.id
+
+	</select>
+	
+	<select id="selectAllIdContract" resultType="int">
+		select * from (SELECT a.id, a.contractid, a.detail, b.name, a.createdate, a.modifieddate, a.createdby, a.modifiedby from detail_contract a, model b where a.modelid = b.id) as c where c.contractid = #{id}
+	</select>
+	
+	<select id="selectAllByContractId" parameterType="int" resultType="contractDetailDTO">
+		SELECT c.createdate,c.`status`,u.name as username,s.name as staffname,u.address as useraddress,s.address as staffaddress,a.email,u.phone as userphone,s.phone as staffphone,m.name as modelname,c.description,r.name AS rank
+		FROM contract c,detail_contract dc,account a,model m, rank_model r,user u, staff s
+		WHERE dc.contractid = c.id AND a.id = c.accountid AND dc.modelid = m.id AND m.rankid = r.id AND u.accountid = a.id AND s.accountid = a.id
+		AND c.id = #{contractid} 
+	</select>
+	
+	<select id="selectByContractid" resultType="contractDetailDTO" parameterType="String">
+		SELECT c.id, c.contractid, c.detail, d.name, c.`status`, c.createdate, c.modifieddate, c.createdby, c.modifiedby FROM 
+		(SELECT a.id, a.contractid, a.detail,a.modelid, b.status, a.createdate, a.modifieddate, a.createdby, a.modifiedby FROM detail_contract a, contract b WHERE a.contractid=b.id) AS c, model d where c.modelid = d.id
+		and c.contractid LIKE #{name}	
+	</select>
+	
+	<select id="selectById" resultType="contractDetailModel" parameterType="int">
+		select * from detail_contract where id = #{id}
+	</select>
+	
+	<insert id="insert" parameterType="contractDetailModel">
+		insert into detail_contract (contractid, detail, modelid, createdate, modifieddate, createdby, modifiedby,day,price)
+		values(#{contractid}, #{detail}, #{modelid}, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), #{createdby}, #{modifiedby},#{day},#{price})
+	</insert>
+	
+	<insert id="insertList" parameterType="java.util.List">
+		insert into detail_contract (contractid, modelid, createdate, modifieddate) 
+		values 
+			<foreach collection="list" item="item" separator=" , ">
+				(#{item.contractid}, #{item.modelid}, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())
+			</foreach>
+	</insert>
+	
+	<update id="update" parameterType="contractDetailModel">
+		update detail_contract set
+		contractid = #{contractid}, detail = #{detail}, modelid = #{modelid}, modifieddate= CURRENT_TIMESTAMP(), createdby=#{createdby}, modifiedby=#{modifiedby}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.List">
+		delete from detail_contract where id in
+		<foreach collection="list" item="item" index="key" open="(" separator=" , " close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+</mapper>

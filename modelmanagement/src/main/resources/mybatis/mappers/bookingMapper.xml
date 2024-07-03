@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.bookingMapper">
+
+	<select id="selectByModelId" resultType="bookingModel" parameterType="int">
+		<![CDATA[
+			select * from booking where modelid = #{modelid}
+		]]>
+	</select>
+	
+	<select id="selectByAccountId" resultType="bookingModel" parameterType="int">
+		<![CDATA[
+			select * from booking where accountid = #{accountid}
+		]]>
+	</select>
+	
+	<select id="selectByModelAndAccount" resultType="bookingModel" parameterType="java.util.ArrayList">
+			select * from booking where 
+			<foreach collection="array" index="index" item="item" separator="and">
+				<if test="index == 0">modelid = #{item}</if>
+				<if test="index == 1">accountid = #{item}</if>
+			</foreach>
+			  
+	</select>
+	
+	<select id="selectByModelAndAccountAndDate" resultType="bookingModel" parameterType="java.util.ArrayList">
+			select * from booking where 
+			<foreach collection="array" index="index" item="item" separator="and">
+				<if test="index == 0">modelid = #{item}</if>
+				<if test="index == 1">accountid = #{item}</if>
+				<if test="index == 2">startdate = #{item}</if>
+				<if test="index == 3">startmonth = #{item}</if>
+				<if test="index == 4">startyear = #{item}</if>
+			</foreach>
+	</select>
+	
+	<update id="updateStatus">
+		update booking set status = 1 
+			<foreach collection="array" item="item" index="key">
+				<if test="key == 0"> where modelid = #{item}</if>
+				<if test="key == 1"> and accountid = #{item}</if>
+			</foreach>
+	
+	</update>
+	
+	<insert id="insert" parameterType="bookingModel" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into booking
+			(accountid, modelid, startdate, startmonth, startyear, status) 
+			values (#{accountid}, #{modelid}, #{startdate}, #{startmonth}, #{startyear}, #{status})
+		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="java.util.ArrayList">
+		DELETE FROM booking WHERE 
+		<foreach collection="array" item="item" index="index" separator=" and ">
+			<if test="index == 0">modelid = ${item}</if>
+			<if test="index == 1">accountid = ${item}</if>
+		</foreach>
+	</delete>
+
+</mapper>

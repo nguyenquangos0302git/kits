@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.reportMapper">
+
+	<select id="selectAll" resultType="reportModel"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from report
+		]]>
+	</select>
+	
+	<select id="week" resultType="reportDTO">
+		<![CDATA[
+			SELECT count(totalprice) weekOrders, SUM(totalprice) weekSales FROM contract WHERE DATEDIFF(NOW() , createdate)  <= 7 AND status = 1
+		]]>
+	</select>
+	
+	<select id="beforeWeek" resultType="reportDTO">
+		<![CDATA[
+			SELECT count(id) beforeWeekOrders, sum(totalprice) beforeWeekSales FROM contract WHERE DATEDIFF(NOW() , createdate) <= 14 AND DATEDIFF(NOW() , createdate) >7 AND status = 1
+		]]>
+	</select>
+	
+	<select id="selectSpendingByMonth" resultType="reportModel" parameterType="int">
+		SELECT SUM(salary) AS spending FROM (SELECT * FROM salary_model where MONTH = #{month} UNION ALL SELECT * FROM salary_staff where MONTH = #{month}) AS a WHERE a.month = #{month}
+	</select>
+	
+	<select id="selectIncomeByMonth" resultType="reportModel" parameterType="int"> 
+		SELECT SUM(totalprice) as income FROM contract WHERE MONTH(createdate) = #{month}
+	</select>
+	
+	<insert id="insert" parameterType="reportModel">
+		insert into report(spending,income,profit,month,year,createdate,modifieddate)
+				values(#{spending},#{income},#{profit},#{month},#{year},CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())
+	</insert>
+
+</mapper>

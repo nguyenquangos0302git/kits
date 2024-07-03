@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.userMapper">
+	<!-- make sql statement -->
+	<!-- List<AccountModel> accounts = selectAll() -->
+	
+	<insert id="insert" parameterType="userModel" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into user 
+			(name, phone, gender, avatar, accountid, createdby, modifiedby) 
+			values (#{name}, #{phone}, #{gender}, #{avatar}, #{accountid}, #{createdby}, #{modifiedby})
+		]]>
+	</insert>
+	
+	<select id="selectByAccountId" resultType="userModel" parameterType="int"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from user where accountid = #{accountid}
+		]]>
+	</select>
+	
+	<select id="selectUserByIdCard" resultType="userModel" parameterType="String"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			select * from user where idcard = #{idcard}
+		]]>
+	</select>
+	
+	<delete id="deleteUserByAccountId" parameterType="int"> <!-- mappers.accountMapper.selectAll -->
+		<![CDATA[
+			delete from user where accountid = #{accountid}
+		]]>
+	</delete>
+	<update id="update" parameterType="userModel">
+		<![CDATA[
+			update user set 
+			name = #{name}, address = #{address}, phone = #{phone}, company = #{company}
+			where id = #{id}
+		]]>
+	</update>
+</mapper>
